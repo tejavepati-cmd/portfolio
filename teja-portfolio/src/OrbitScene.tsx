@@ -1,5 +1,9 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 function makeBag(): THREE.Group {
   const bag = new THREE.Group()
@@ -125,6 +129,21 @@ export default function OrbitScene() {
     const observer = new ResizeObserver(resize)
     observer.observe(el)
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const scrollContext = reduceMotion ? null : gsap.context(() => {
+      gsap.to(sculpture.position, {
+        x: 0.14,
+        y: 0.12,
+        ease: 'none',
+        scrollTrigger: { trigger: document.getElementById('top'), start: 'top top', end: 'bottom top', scrub: 1 },
+      })
+      gsap.to(sculpture.scale, {
+        x: 0.86,
+        y: 0.86,
+        z: 0.86,
+        ease: 'none',
+        scrollTrigger: { trigger: document.getElementById('top'), start: 'top top', end: 'bottom top', scrub: 1 },
+      })
+    })
     let frame = 0
     const render = () => {
       if (!reduceMotion) frame = requestAnimationFrame(render)
@@ -142,6 +161,7 @@ export default function OrbitScene() {
     return () => {
       cancelAnimationFrame(frame)
       observer.disconnect()
+      scrollContext?.revert()
       el.removeEventListener('pointermove', onMove)
       scene.traverse(object => {
         if (object instanceof THREE.Mesh || object instanceof THREE.Points) {
@@ -158,3 +178,4 @@ export default function OrbitScene() {
 
   return <div className="scene-wrap" aria-label="Interactive 3D smart reminder bag with illuminated sensor and orbital signal rings" role="img"><div className="scene" ref={host} /><div className="scene-label mono"><span className="live-dot"/> SMART SIGNAL <span>01 / 03</span></div></div>
 }
+
