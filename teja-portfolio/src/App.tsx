@@ -1,61 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
-import * as THREE from 'three'
+import { useEffect, useState } from 'react'
+import OrbitScene from './OrbitScene'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-function OrbitScene() {
-  const host = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    const el = host.current
-    if (!el) return
-    const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100)
-    camera.position.z = 8.5
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' })
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.7))
-    renderer.setSize(el.clientWidth, el.clientHeight)
-    renderer.setClearColor(0x000000, 0)
-    el.appendChild(renderer.domElement)
-    const group = new THREE.Group()
-    scene.add(group)
-    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(1.12, 3), new THREE.MeshStandardMaterial({ color: 0xff7149, roughness: 0.24, metalness: 0.38, emissive: 0x42170f, emissiveIntensity: 0.55, flatShading: true }))
-    group.add(core)
-    const wire = new THREE.Mesh(new THREE.IcosahedronGeometry(1.2, 2), new THREE.MeshBasicMaterial({ color: 0xffc0a5, wireframe: true, transparent: true, opacity: 0.3 }))
-    group.add(wire)
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0xffaa88, transparent: true, opacity: 0.58, side: THREE.DoubleSide })
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.012, 8, 160), ringMat)
-    ring.rotation.set(0.9, 0.15, -0.35)
-    group.add(ring)
-    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.006, 6, 160), new THREE.MeshBasicMaterial({ color: 0x778e76, transparent: true, opacity: 0.65 }))
-    ring2.rotation.set(1.4, -0.6, 0.45)
-    group.add(ring2)
-    scene.add(new THREE.HemisphereLight(0xc5d1c4, 0x281b18, 2.2))
-    const light = new THREE.PointLight(0xff8d65, 18, 18)
-    light.position.set(3, 3, 4)
-    scene.add(light)
-    const starsGeo = new THREE.BufferGeometry()
-    const points = new Float32Array(210 * 3)
-    for (let i = 0; i < points.length; i += 3) { points[i] = (Math.random() - 0.5) * 9; points[i + 1] = (Math.random() - 0.5) * 8; points[i + 2] = (Math.random() - 0.5) * 3 }
-    starsGeo.setAttribute('position', new THREE.BufferAttribute(points, 3))
-    const stars = new THREE.Points(starsGeo, new THREE.PointsMaterial({ color: 0xc8d0be, size: 0.015, transparent: true, opacity: 0.75 }))
-    scene.add(stars)
-    const pointer = new THREE.Vector2()
-    const onMove = (e: PointerEvent) => { const r = el.getBoundingClientRect(); pointer.x = ((e.clientX - r.left) / r.width - 0.5) * 2; pointer.y = -((e.clientY - r.top) / r.height - 0.5) * 2 }
-    el.addEventListener('pointermove', onMove)
-    const resize = () => { if (!el.clientWidth) return; camera.aspect = el.clientWidth / el.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(el.clientWidth, el.clientHeight) }
-    const observer = new ResizeObserver(resize); observer.observe(el)
-    let frame = 0
-    const animate = () => { frame = requestAnimationFrame(animate); group.rotation.y += 0.0022; group.rotation.x = THREE.MathUtils.lerp(group.rotation.x, pointer.y * 0.15, 0.025); group.rotation.z = THREE.MathUtils.lerp(group.rotation.z, pointer.x * 0.08, 0.025); core.rotation.y -= 0.003; stars.rotation.y -= 0.00012; renderer.render(scene, camera) }
-    animate()
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); el.removeEventListener('pointermove', onMove); renderer.dispose(); scene.traverse(o => { if (o instanceof THREE.Mesh || o instanceof THREE.Points) { o.geometry.dispose(); const m = o.material; if (Array.isArray(m)) m.forEach(x => x.dispose()); else m.dispose() } }); renderer.domElement.remove() }
-  }, [])
-  return <div className="scene-wrap" aria-label="Interactive 3D abstract orange core surrounded by orbital rings" role="img"><div className="scene" ref={host} /><div className="scene-label mono"><span className="live-dot"/> INTERACTIVE FIELD <span>01 / 03</span></div></div>
-}
-
 const projects = [
-  { number: '01', name: 'Smart Reminder Bag', type: 'CONNECTED OBJECT · IOT', description: 'A everyday carry companion that remembers what matters. Thoughtful hardware meets a calm, useful software experience.', tags: ['IoT', 'Embedded systems', 'Product thinking'], color: 'project-orange', mark: '↗', visual: 'bag' },
+  { number: '01', name: 'Smart Reminder Bag', type: 'CONNECTED OBJECT · IOT', description: 'An everyday carry companion that remembers what matters. Thoughtful hardware meets a calm, useful software experience.', tags: ['IoT', 'Embedded systems', 'Product thinking'], color: 'project-orange', mark: '↗', visual: 'bag' },
   { number: '02', name: 'SRM Fire Protection', type: 'SAFETY · DIGITAL EXPERIENCE', description: 'A clearer way to navigate fire protection and safety services, built around trust, clarity, and getting the right help quickly.', tags: ['Web design', 'Accessibility', 'Service UX'], color: 'project-sage', mark: '⌁', visual: 'safety' },
 ]
 const skills = ['React', 'TypeScript', 'JavaScript', 'Three.js', 'Node.js', 'Python', 'UI engineering', 'Creative coding', 'Product thinking', 'Prototyping', 'Git', 'CSS']
@@ -92,6 +43,8 @@ function App() {
 }
 
 export default App
+
+
 
 
 
