@@ -1,26 +1,77 @@
 # Teja Vepati — DRaX
 
-An original portfolio experience for Teja Vepati, built with React, TypeScript, Three.js, GSAP, and Vite. The hero renders an original procedural smart-bag sculpture and orbital signals in Three.js; all project artwork is CSS-generated.
+An original portfolio experience for Teja Vepati, built with React, TypeScript, Three.js, GSAP, and Vite.
 
-## Run locally
+The hero renders an original procedural smart-bag sculpture and orbital signals in Three.js. All project artwork is generated with CSS.
 
-```sh
+## Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Available Scripts](#available-scripts)
+- [Accessibility and Performance](#accessibility-and-performance)
+- [Contact](#contact)
+
+## Tech Stack
+
+| Technology | Purpose |
+| --- | --- |
+| React | UI components |
+| TypeScript | Type-safe application code |
+| Three.js | 3D hero scene |
+| GSAP | Animation and scroll-driven motion |
+| Vite | Development server and production builds |
+
+## Project Structure
+
+```text
+teja-portfolio/
+├── src/                 # Application source code
+├── index.html           # Vite entry HTML
+├── package.json         # Dependencies and scripts
+├── package-lock.json    # Locked dependency versions
+├── tsconfig.json        # TypeScript configuration
+├── vite.config.ts       # Vite configuration
+├── eslint.config.js     # ESLint configuration
+├── .gitignore           # Files excluded from Git
+└── README.md            # Project documentation
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js and npm
+
+### Installation
+
+```bash
 npm install
+```
+
+### Run Locally
+
+```bash
 npm run dev
 ```
 
-## Build and lint
+## Available Scripts
 
-```sh
-npm run build
-npm run lint
-```
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the local development server |
+| `npm run build` | Create a production build |
+| `npm run lint` | Run ESLint on the project |
 
-## Accessibility and performance
+## Accessibility and Performance
 
-The site includes semantic landmarks, keyboard skip navigation, responsive navigation, reduced-motion handling, capped WebGL pixel ratio, and a mobile-first layout. Three.js renders a small procedural scene without external model or texture downloads.
+- Semantic landmarks and keyboard skip navigation
+- Responsive navigation with a mobile-first layout
+- Reduced-motion handling
+- Capped WebGL pixel ratio
+- Small procedural Three.js scene with no external model or texture downloads
 
-The contact links point to Teja Vepati at tejavepati@gmail.com.
+## Contact
 
-
-
+- Email: [tejavepati@gmail.com](mailto:tejavepati@gmail.com)
